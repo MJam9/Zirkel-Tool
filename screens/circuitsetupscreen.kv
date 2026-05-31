@@ -1,0 +1,121 @@
+#:kivy 2.0
+
+<CircuitSetupScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20dp'
+        spacing: '15dp'
+        
+        # Titel
+        Label:
+            text: 'Zirkel einstellen'
+            size_hint_y: 0.1
+            font_size: '28sp'
+            bold: True
+        
+        # ScrollView für die Eingabefelder
+        ScrollView:
+            size_hint_y: 0.7
+            
+            GridLayout:
+                cols: 1
+                spacing: '20dp'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: '10dp'
+                
+                # Runden-Anzahl
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: '80dp'
+                    spacing: '5dp'
+                    
+                    Label:
+                        text: 'Runden-Anzahl'
+                        size_hint_y: 0.3
+                        font_size: '16sp'
+                    
+                    TextInput:
+                        id: rounds_input
+                        text: root.rounds
+                        multiline: False
+                        input_filter: 'int'
+                        hint_text: 'z.B. 3'
+                        size_hint_y: 0.7
+                
+                # Zeit Zirkeleinheit
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: '80dp'
+                    spacing: '5dp'
+                    
+                    Label:
+                        text: 'Zeit pro Übung (Sekunden)'
+                        size_hint_y: 0.3
+                        font_size: '16sp'
+                    
+                    TextInput:
+                        id: exercise_time_input
+                        text: root.exercise_time
+                        multiline: False
+                        input_filter: 'int'
+                        hint_text: 'z.B. 30'
+                        size_hint_y: 0.7
+                
+                # Zeit Pause
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: '80dp'
+                    spacing: '5dp'
+                    
+                    Label:
+                        text: 'Pausenzeit (Sekunden)'
+                        size_hint_y: 0.3
+                        font_size: '16sp'
+                    
+                    TextInput:
+                        id: pause_time_input
+                        text: root.pause_time
+                        multiline: False
+                        input_filter: 'int'
+                        hint_text: 'z.B. 10'
+                        size_hint_y: 0.7
+                
+                # Vorbereitungszeit
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: '80dp'
+                    spacing: '5dp'
+                    
+                    Label:
+                        text: 'Vorbereitungszeit (Sekunden)'
+                        size_hint_y: 0.3
+                        font_size: '16sp'
+                    
+                    TextInput:
+                        id: prep_time_input
+                        text: root.prep_time if hasattr(root, 'prep_time') else '5'
+                        multiline: False
+                        input_filter: 'int'
+                        hint_text: 'z.B. 5'
+                        size_hint_y: 0.7
+        
+        # Button Layout (Zurück + Starten)
+        BoxLayout:
+            size_hint_y: 0.15
+            spacing: '10dp'
+            
+            Button:
+                text: 'Zurück'
+                background_color: (0.8, 0.2, 0.2, 1)
+                on_press: root.go_back()
+            
+            Button:
+                text: 'Zirkel starten'
+                background_color: (0.2, 0.8, 0.2, 1)
+                on_press: root.start_circuit()
+

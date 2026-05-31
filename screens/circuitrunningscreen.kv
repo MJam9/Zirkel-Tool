@@ -1,0 +1,46 @@
+#:kivy 2.0
+
+<CircuitRunningScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20dp'
+        spacing: '20dp'
+        
+        # Info Box (Runde und Phase)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.15
+            spacing: '10dp'
+            
+            Label:
+                text: f'Runde {root.current_round}/{root.rounds}'
+                font_size: '20sp'
+                bold: True
+            
+            Label:
+                text: root.current_phase
+                font_size: '20sp'
+                bold: True
+                color: (0.2, 0.8, 0.6, 1) if root.current_phase == 'Übung' else (0.8, 0.6, 0.2, 1)
+        
+        # Timer (großes Display)
+        Label:
+            text: str(int(root.time_remaining))
+            size_hint_y: 0.5
+            font_size: '120sp'
+            bold: True
+        
+        # Kontrollbuttons
+        BoxLayout:
+            size_hint_y: 0.2
+            spacing: '10dp'
+            
+            Button:
+                text: 'Start'
+                background_color: (0.2, 0.8, 0.2, 1)
+                on_press: root.start_timer()
+            
+            Button:
+                text: 'Stop'
+                background_color: (0.8, 0.2, 0.2, 1)
+                on_press: root.stop_circuit()

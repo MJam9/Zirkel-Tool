@@ -1,0 +1,26 @@
+#:kivy 2.0
+
+<SavedCircuitsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20dp'
+        spacing: '15dp'
+        
+        # Titel
+        Label:
+            text: 'Gespeicherte Zirkel'
+            size_hint_y: 0.1
+            font_size: '28sp'
+            bold: True
+        
+        # Inhalt (Platzhalter)
+        Label:
+            text: 'Hier werden deine gespeicherten Zirkel angezeigt'
+            size_hint_y: 0.7
+        
+        # Zurück-Button
+        Button:
+            text: 'Zurück'
+            size_hint_y: 0.1
+            background_color: (0.8, 0.2, 0.2, 1)
+            on_press: root.go_back()

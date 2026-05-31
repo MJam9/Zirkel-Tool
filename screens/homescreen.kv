@@ -1,0 +1,34 @@
+#:kivy 2.0
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '20dp'
+        spacing: '20dp'
+        
+        # Titel
+        Label:
+            text: 'Zirkel Tool'
+            size_hint_y: 0.3
+            font_size: '32sp'
+            bold: True
+        
+        # Button Layout
+        GridLayout:
+            cols: 1
+            spacing: '15dp'
+            size_hint_y: 0.7
+            
+            # Button 1: Zirkel einstellen
+            Button:
+                text: 'Zirkel einstellen'
+                size_hint_y: 0.5
+                background_color: (0.2, 0.6, 0.8, 1)
+                on_press: root.go_to_setup()
+            
+            # Button 2: Gespeicherte Zirkel
+            Button:
+                text: 'Gespeicherte Zirkel'
+                size_hint_y: 0.5
+                background_color: (0.2, 0.8, 0.6, 1)
+                on_press: root.go_to_saved()
