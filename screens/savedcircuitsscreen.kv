@@ -13,14 +13,30 @@
             font_size: '28sp'
             bold: True
         
-        # Inhalt (Platzhalter)
+        ScrollView:
+            size_hint_y: 0.75
+            GridLayout:
+                id: saved_circuits_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: '10dp'
+                padding: '10dp'
+
         Label:
-            text: 'Hier werden deine gespeicherten Zirkel angezeigt'
-            size_hint_y: 0.7
+            id: empty_label
+            text: 'Keine gespeicherten Zirkel gefunden.'
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+            opacity: 0
         
-        # Zurück-Button
-        Button:
-            text: 'Zurück'
+        BoxLayout:
             size_hint_y: 0.1
-            background_color: (0.8, 0.2, 0.2, 1)
-            on_press: root.go_back()
+            spacing: '10dp'
+            Button:
+                text: 'Zurück'
+                background_color: (0.8, 0.2, 0.2, 1)
+                on_press: root.go_back()

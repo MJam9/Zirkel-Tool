@@ -104,7 +104,7 @@
                         hint_text: 'z.B. 5'
                         size_hint_y: 0.7
         
-        # Button Layout (Zurück + Starten)
+        # Button Layout (Zurück + Speichern + Starten)
         BoxLayout:
             size_hint_y: 0.15
             spacing: '10dp'
@@ -113,6 +113,11 @@
                 text: 'Zurück'
                 background_color: (0.8, 0.2, 0.2, 1)
                 on_press: root.go_back()
+            
+            Button:
+                text: 'Speichern'
+                background_color: (0.2, 0.5, 0.9, 1)
+                on_press: root.open_save_popup()
             
             Button:
                 text: 'Zirkel starten'
