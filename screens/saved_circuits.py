@@ -61,6 +61,7 @@ class SavedCircuitsScreen(Screen):
         button_bar = BoxLayout(size_hint_y=None, height='50dp', spacing='10dp')
         back_button = Button(text='Zurück', background_color=(0.8, 0.2, 0.2, 1))
         select_button = Button(text='Wählen', background_color=(0.2, 0.8, 0.2, 1))
+        delete_button = Button(text='Löschen', background_color=(0.9, 0.5, 0.1, 1))
 
         popup = Popup(
             title='Zirkel auswählen',
@@ -71,9 +72,11 @@ class SavedCircuitsScreen(Screen):
 
         back_button.bind(on_release=popup.dismiss)
         select_button.bind(on_release=lambda *_: self.select_saved_circuit(name, popup))
+        delete_button.bind(on_release=lambda *_: self.delete_saved_circuit(name, popup))
 
         button_bar.add_widget(back_button)
         button_bar.add_widget(select_button)
+        button_bar.add_widget(delete_button)
         content.add_widget(button_bar)
 
         popup.open()
@@ -92,6 +95,21 @@ class SavedCircuitsScreen(Screen):
         )
         popup.dismiss()
         self.manager.current = 'circuit_running'
+
+    def delete_saved_circuit(self, name, popup):
+        """Löscht einen gespeicherten Zirkel"""
+        if name in self.saved_circuits:
+            del self.saved_circuits[name]
+            
+            # Speichern in JSON-Datei
+            try:
+                with open(SAVED_CIRCUITS_FILE, 'w', encoding='utf-8') as file:
+                    json.dump(self.saved_circuits, file, ensure_ascii=False, indent=2)
+            except OSError:
+                pass
+            
+            popup.dismiss()
+            self.load_saved_circuits()
 
     def go_back(self):
         """Zurück zur Startseite"""
