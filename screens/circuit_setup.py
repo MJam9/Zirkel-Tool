@@ -9,6 +9,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from kivy.properties import StringProperty
+from kivy.clock import Clock
 
 SAVED_CIRCUITS_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'saved_circuits.json')
 
@@ -17,10 +18,63 @@ class CircuitSetupScreen(Screen):
     """Seite zum Einstellen/Erstellen eines Zirkels"""
     
     # Properties für die Input-Felder
-    rounds = StringProperty('3')
-    exercise_time = StringProperty('30')
-    pause_time = StringProperty('10')
-    prep_time = StringProperty('5')
+    rounds = StringProperty('')
+    exercise_time = StringProperty('')
+    pause_time = StringProperty('')
+    prep_time = StringProperty('')
+    total_duration = StringProperty('')
+
+    def on_enter(self):
+        """Wird aufgerufen wenn der Screen angezeigt wird"""
+        # Binde die Input-Felder an Update-Events
+        if hasattr(self.ids, 'rounds_input'):
+            self.ids.rounds_input.bind(text=self._on_input_change)
+        if hasattr(self.ids, 'exercise_time_input'):
+            self.ids.exercise_time_input.bind(text=self._on_input_change)
+        if hasattr(self.ids, 'pause_time_input'):
+            self.ids.pause_time_input.bind(text=self._on_input_change)
+        if hasattr(self.ids, 'prep_time_input'):
+            self.ids.prep_time_input.bind(text=self._on_input_change)
+        self.update_total_duration()
+
+    def on_leave(self):
+        """Wird aufgerufen wenn der Screen verlassen wird"""
+        # Unbinde die Events
+        if hasattr(self.ids, 'rounds_input'):
+            self.ids.rounds_input.unbind(text=self._on_input_change)
+        if hasattr(self.ids, 'exercise_time_input'):
+            self.ids.exercise_time_input.unbind(text=self._on_input_change)
+        if hasattr(self.ids, 'pause_time_input'):
+            self.ids.pause_time_input.unbind(text=self._on_input_change)
+        if hasattr(self.ids, 'prep_time_input'):
+            self.ids.prep_time_input.unbind(text=self._on_input_change)
+
+    def _on_input_change(self, instance, value):
+        """Callback wenn sich ein Input-Feld ändert"""
+        # Verzögere das Update etwas um Performance zu verbessern
+        Clock.schedule_once(lambda dt: self.update_total_duration(), 0.1)
+
+    def update_total_duration(self):
+        """Berechne und aktualisiere die Gesamtdauer des Zirkels"""
+        try:
+            rounds = int(self.ids.rounds_input.text) if self.ids.rounds_input.text else 0
+            exercise_time = int(self.ids.exercise_time_input.text) if self.ids.exercise_time_input.text else 0
+            pause_time = int(self.ids.pause_time_input.text) if self.ids.pause_time_input.text else 0
+            prep_time = int(self.ids.prep_time_input.text) if self.ids.prep_time_input.text else 0
+            
+            # Gesamtdauer berechnen:
+            # prep_time (Vorbereitung 1x)
+            # + rounds * exercise_time (Übungen)
+            # + (rounds - 1) * pause_time (Pausen zwischen Runden, nicht nach der letzten)
+            total_seconds = prep_time + (rounds * exercise_time) + (max(0, rounds - 1) * pause_time)
+            
+            # In Minuten und Sekunden umwandeln
+            minutes = total_seconds // 60
+            seconds = total_seconds % 60
+            
+            self.total_duration = f"{minutes}:{seconds:02d}"
+        except (ValueError, AttributeError):
+            self.total_duration = "0:00"
 
     def get_settings_data(self):
         rounds = int(self.ids.rounds_input.text)
@@ -92,6 +146,16 @@ class CircuitSetupScreen(Screen):
             except (ValueError, OSError, json.JSONDecodeError):
                 saved = {}
 
+        # Berechne die Gesamtdauer
+        total_seconds = (settings['prep_time'] + 
+                        (settings['rounds'] * settings['exercise_time']) + 
+                        (max(0, settings['rounds'] - 1) * settings['pause_time']))
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        total_duration = f"{minutes}:{seconds:02d}"
+        
+        # Speichere die Einstellungen mit der berechneten Dauer
+        settings['total_duration'] = total_duration
         saved[name] = settings
 
         with open(SAVED_CIRCUITS_FILE, 'w', encoding='utf-8') as file:

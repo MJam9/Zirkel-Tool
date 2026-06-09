@@ -57,6 +57,18 @@ class SavedCircuitsScreen(Screen):
         content.add_widget(Label(text=f'Übungszeit: {circuit.get("exercise_time")} sec', size_hint_y=None, height='30dp'))
         content.add_widget(Label(text=f'Pausenzeit: {circuit.get("pause_time")} sec', size_hint_y=None, height='30dp'))
         content.add_widget(Label(text=f'Vorbereitung: {circuit.get("prep_time")} sec', size_hint_y=None, height='30dp'))
+        
+        # Zeige die Gesamtdauer
+        total_duration = circuit.get('total_duration', '0:00')
+        duration_label = Label(
+            text=f'Gesamtdauer: {total_duration}',
+            size_hint_y=None,
+            height='40dp',
+            font_size='16sp',
+            bold=True,
+            color=(0.2, 0.8, 0.2, 1)
+        )
+        content.add_widget(duration_label)
 
         button_bar = BoxLayout(size_hint_y=None, height='50dp', spacing='10dp')
         back_button = Button(text='Zurück', background_color=(0.8, 0.2, 0.2, 1))
@@ -66,7 +78,7 @@ class SavedCircuitsScreen(Screen):
         popup = Popup(
             title='Zirkel auswählen',
             content=content,
-            size_hint=(0.9, 0.5),
+            size_hint=(0.95, 0.6),
             auto_dismiss=False
         )
 
